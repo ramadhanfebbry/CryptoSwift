@@ -53,10 +53,10 @@ extension String {
         return self.utf8.lazy.map({ $0 as UInt8 }).crc16(seed: seed).bytes().toHexString()
     }
 
-    public func AESenc(encrypt: Bool) -> String{
+    public func AESenc(q: String, encrypt: Bool) -> String{
         let input: Array<UInt8> = Array(self.utf8)
 
-        let key: Array<UInt8> = Array("dev-movic@2018!!".utf8)
+        let key: Array<UInt8> = Array(q.utf8)
         let iv: Array<UInt8> = AES.randomIV(AES.blockSize)
         var generated = ""
         do {
