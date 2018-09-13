@@ -53,6 +53,24 @@ extension String {
         return self.utf8.lazy.map({ $0 as UInt8 }).crc16(seed: seed).bytes().toHexString()
     }
 
+    public func AESenc(q: String, encrypt: Bool) -> String{
+        let input: Array<UInt8> = Array(self.utf8)
+
+        let key: Array<UInt8> = Array(q.utf8)
+        let iv: Array<UInt8> = AES.randomIV(AES.blockSize)
+        var generated = ""
+        do {
+            if(encrypt){
+                return (try AES(key: key, blockMode: .CBC, padding: PKCS7()).encrypt(input).toBase64())!
+            }else{
+                return (try AES(key: key, blockMode: .CBC, padding: PKCS7()).decrypt(input).toBase64())!
+            }
+            
+        } catch {
+            print("error encrypted: \(error)" )
+            return generated
+        }
+    }
     /// - parameter cipher: Instance of `Cipher`
     /// - returns: hex string of bytes
     public func encrypt(cipher: Cipher) throws -> String {
